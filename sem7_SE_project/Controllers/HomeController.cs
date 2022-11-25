@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using sem7_SE_project.Models;
-using System.Diagnostics;
 
 namespace sem7_SE_project.Controllers
 {
@@ -16,17 +14,6 @@ namespace sem7_SE_project.Controllers
         public IActionResult Index()
         {
             return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
