@@ -16,5 +16,10 @@ namespace sem7_SE_project.Models
 
         public List<Car>? TestDrivedCars { get; set; }
 
+        public bool CheckPassword(string? password)
+        {
+            return Password!.Equals(password);
+        }
+
     }
 }

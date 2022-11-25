@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var user = User.Identity;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,6 +27,14 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                     </ul>
+                </div>
+                <div class="text-end">
+                    @if (user != null && user.IsAuthenticated)
+                    {
+                        <a asp-area="" asp-controller="admin" asp-action="logout" class="btn btn-outline-primary">
+                            Logout
+                        </a>
+                    }
                 </div>
             </div>
         </nav>
