@@ -177,5 +177,21 @@ namespace sem7_SE_project.Controllers
             var cars = _carService.GetCars();
             return View(cars);
         }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult AddCar()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public IActionResult AddCar(int carModelId, string registrationNumber, int fuelCapacity, int numberOfSeats, int price, int mileage, int engineTypeId, List<int>? embeddedDevicesIds)
+        {
+            _carService.AddCar(carModelId, registrationNumber, fuelCapacity, numberOfSeats, price, mileage, engineTypeId, embeddedDevicesIds);
+            return Redirect("~/admin/cars/");
+        }
+
+
     }
 }

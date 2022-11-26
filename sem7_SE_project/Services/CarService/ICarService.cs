@@ -5,6 +5,14 @@ namespace sem7_SE_project.Services.CarService
 {
     public interface ICarService
     {
+        public List<EmbeddedDevice> GetEmbeddedDevices();
+
+        public List<EmbeddedDevice> GetEmbeddedDevices(string searchWord);
+
+        public List<EngineType> GetEngineTypes();
+
+        public List<EngineType> GetEngineTypes(string searchWord);
+
         public List<Brand> GetCarBrands();
 
         public Brand? GetCarBrand(int carBrandId);
@@ -16,6 +24,8 @@ namespace sem7_SE_project.Services.CarService
         public void UpdateCarBrand(int carBrandId, string? name);
 
         public List<Model> GetCarModels();
+
+        public List<Model> GetCarModels(int brandId);
 
         public Model? GetCarModel(int carModelId);
 

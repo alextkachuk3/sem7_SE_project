@@ -1,0 +1,142 @@
+﻿<link href="~/css/select2.min.css" rel="stylesheet" />
+
+<div class="container">
+    <form method="post">
+        <div class="form-text">
+            <div class="col-sm-8"><h2>Add car</h2></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="carBrandInput" class="form-label">Brand</label>
+            <select name="carBrandId" id="carBrandInput" class="form-select" aria-label=".form-select-sm example">
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="carModelInput" class="form-label">Model</label>
+            <select name="carModelId" id="carModelInput" class="form-select" aria-label=".form-select-sm example">
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="registrationNumberInput" class="form-label">Registration number</label>
+            <input name="registrationNumber" type="text" class="form-control" id="registrationNumberInput">
+        </div>
+
+        <div class="mb-3">
+            <label for="fuelCapacityInput" class="form-label">Fuel capacity</label>
+            <input name="fuelCapacity" type="number" class="form-control" id="fuelCapacityInput">
+        </div>
+
+        <div class="mb-3">
+            <label for="numberOfSeatsInput" class="form-label">Number of seats</label>
+            <input name="numberOfSeats" type="number" class="form-control" id="numberOfSeatsInput">
+        </div>
+
+        <div class="mb-3">
+            <label for="priceInput" class="form-label">Price</label>
+            <div class="input-group">
+            <input name="price" type="number" class="form-control" id="priceInput">
+            <span class="input-group-text">$</span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="mileageInput" class="form-label">Mileage</label>
+            <input name="mileage" type="number" class="form-control" id="mileageInput">
+        </div>
+
+        <div class="mb-3">
+            <label for="engineTypeInput" class="form-label">Engine type</label>
+            <select name="engineTypeId" id="engineTypeInput" class="form-select" aria-label=".form-select-sm example">
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="embeddedDevicesInput" class="form-label">Embedded devices</label>
+            <select name="embeddedDevicesIds" id="embeddedDevicesInput" class="form-select" aria-label=".form-select-sm example" multiple="multiple">
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetCarBrands", "Car")",
+                dataType: "json",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#carBrandInput").append($("<option>", {
+                            value: item.id,
+                            text: item.name
+                        }));
+                    });
+                    console.log(result);
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetEngineTypes", "Car")",
+                dataType: "json",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#engineTypeInput").append($("<option>", {
+                            value: item.id,
+                            text: item.name
+                        }));
+                    });
+                    console.log(result);
+                }
+            });
+
+            $("#embeddedDevicesInput").select2({
+                placeholder: "Select",
+                ajax: {
+                    type: "POST",
+                    url: "@Url.Action("GetEmbeddedDevices", "Car")",
+                    dataType: "json",
+                    data: function (params) {
+                        return {
+                            searchWord: params.term
+                        };
+                    },
+                    processResults: function (data, params) {
+                        console.log(data);
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+            $("#carBrandInput").change(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("GetCarModels", "Car")",
+                    dataType: "json",
+                    data: { brandId: $(this).val() },
+                    success: function (result) {
+                        $("#carModelInput").empty()
+
+                        $.each(result, function (i, item) {
+                            $("#carModelInput").append($("<option>", {
+                                value: item.id,
+                                text: item.name
+                            }));
+                        });
+
+                        $("#carModelInput").val([]);
+                        console.log(result);
+                    }
+                });
+            });
+        });
+    </script>
+}

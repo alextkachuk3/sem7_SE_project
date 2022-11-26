@@ -93,7 +93,22 @@ namespace sem7_SE_project.Services.CarService
 
         public void DeleteCar(int carId)
         {
-            throw new NotImplementedException();
+            var car = GetCar(carId);
+            try
+            {
+                if (car != null)
+                {
+                    _dbContext.Cars!.Remove(car);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                _dbContext.SaveChanges();
+            }
         }
 
         public void DeleteCarBrand(int carBrandId)
@@ -161,9 +176,34 @@ namespace sem7_SE_project.Services.CarService
             return _dbContext.Models!.Include(m => m.Brand).ToList();
         }
 
+        public List<Model> GetCarModels(int brandId)
+        {
+            return _dbContext.Models!.Where(m => m.Brand!.Id.Equals(brandId)).Include(m => m.Brand).ToList();
+        }
+
         public List<Car> GetCars()
         {
             return _dbContext.Cars!.Include(c => c.EmbeddedDevices).Include(c => c.Model).ThenInclude(m => m!.Brand).ToList();
+        }
+
+        public List<EmbeddedDevice> GetEmbeddedDevices()
+        {
+            return _dbContext.EmbeddedDevices!.ToList();
+        }
+
+        public List<EmbeddedDevice> GetEmbeddedDevices(string searchWord)
+        {
+            return _dbContext.EmbeddedDevices!.Where(d => d.Name!.Contains(searchWord)).ToList();
+        }
+
+        public List<EngineType> GetEngineTypes()
+        {
+            return _dbContext.EngineTypes!.ToList();
+        }
+
+        public List<EngineType> GetEngineTypes(string searchWord)
+        {
+            return _dbContext.EngineTypes!.Where(t => t.Name!.Contains(searchWord)).ToList();
         }
 
         public void UpdateCar(int carId, int? modelId, string? registrationNumber, int? fuelCapacity, int? numberOfSeats, int? price, int? mileage, int? engineTypeId, List<int>? embeddedDevicesIds)
