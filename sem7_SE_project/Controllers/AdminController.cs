@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using sem7_SE_project.Models;
 using System.Security.Claims;
 using sem7_SE_project.Services.UserService;
+using sem7_SE_project.Services.CarService;
 
 namespace sem7_SE_project.Controllers
 {
@@ -11,11 +12,13 @@ namespace sem7_SE_project.Controllers
     {
         private readonly ILogger<AdminController> _logger;
         private readonly IUserService _userService;
+        private readonly ICarService _carService;
 
-        public AdminController(ILogger<AdminController> logger, IUserService userService)
+        public AdminController(ILogger<AdminController> logger, IUserService userService, ICarService carService)
         {
             _logger = logger;
             _userService = userService;
+            _carService = carService;
         }
 
         public IActionResult Index()
@@ -70,6 +73,18 @@ namespace sem7_SE_project.Controllers
         {
             HttpContext.SignOutAsync();
             return LocalRedirect("~/");
+        }
+
+        public IActionResult CarBrands()
+        {
+            var brands = _carService.GetCarBrands();
+            return View(brands);
+        }
+
+        public IActionResult DeleteCarBrand(int carBrandId)
+        {
+            _carService.DeleteCarBrand(carBrandId);
+            return LocalRedirect("~/admin/carbrands/");
         }
     }
 }

@@ -16,3 +16,15 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+a.delete {
+    color: #E34724;
+}
+
+a.edit {
+    color: #FFC107;
+}
+
+a.view {
+    color: #03A9F4;
+}

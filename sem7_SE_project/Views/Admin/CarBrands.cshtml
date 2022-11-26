@@ -1,0 +1,42 @@
+﻿@{
+    List<Brand> models = Model;
+}
+
+<div class="container-xl">
+    <div>
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Car brands</h2></div>
+                </div>
+            </div>
+            <table id="Brands" class="table table-striped table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="col-1">#</th>
+                        <th class="col-10">Name</th>
+                        <th class="col-1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Brand brand in models)
+                    {
+                        <tr>
+                            <td> 
+                                @brand.Id
+                            </td>
+                            <td>
+                                @brand.Name
+                            </td>
+                            <td>
+                                @*<a href="#" class="view" title="" data-toggle="tooltip" data-original-title="View"><i class="material-icons"></i></a>*@
+                                <a href="#" class="edit" title="" data-toggle="tooltip" data-original-title="Edit"><i class="material-icons"></i></a>
+                                <a href="@Url.Action("DeleteCarBrand", "Admin")?carBrandId=@brand.Id" class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i class="material-icons"></i></a>
+                            </td>
+                        </tr>
+                    }                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
