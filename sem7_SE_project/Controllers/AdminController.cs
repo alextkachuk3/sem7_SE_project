@@ -5,6 +5,8 @@ using sem7_SE_project.Models;
 using System.Security.Claims;
 using sem7_SE_project.Services.UserService;
 using sem7_SE_project.Services.CarService;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace sem7_SE_project.Controllers
 {
@@ -23,14 +25,14 @@ namespace sem7_SE_project.Controllers
 
         public IActionResult Index()
         {
-            if(HttpContext.User!.Identity!.IsAuthenticated)
+            if (HttpContext.User!.Identity!.IsAuthenticated)
             {
                 return View();
             }
             else
             {
                 return LocalRedirect("~/admin/login");
-            }           
+            }
         }
 
         public IActionResult Login()
@@ -75,27 +77,31 @@ namespace sem7_SE_project.Controllers
             return Redirect("~/");
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult CarBrands()
         {
             var brands = _carService.GetCarBrands();
             return View(brands);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult CarBrands(List<int> carBrandsIds)
         {
-            foreach(var id in carBrandsIds)
+            foreach (var id in carBrandsIds)
             {
                 _carService.DeleteCarBrand(id);
-            }            
+            }
             return Redirect("~/admin/carbrands/");
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult AddCarBrand()
         {
             return View();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult AddCarBrand(string carBrandName)
         {
@@ -103,12 +109,14 @@ namespace sem7_SE_project.Controllers
             return Redirect("~/admin/carbrands/");
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult EditCarBrand(int carBrandId)
         {
             var brand = _carService.GetCarBrand(carBrandId);
             return View(brand);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult EditCarBrand(int carBrandId, string carBrandName)
         {
@@ -116,27 +124,31 @@ namespace sem7_SE_project.Controllers
             return Redirect("~/admin/carbrands/");
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult CarModels()
         {
-            var carModels =  _carService.GetCarModels();
+            var carModels = _carService.GetCarModels();
             return View(carModels);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult CarModels(List<int> carModelsIds)
         {
-            foreach(var id in carModelsIds)
+            foreach (var id in carModelsIds)
             {
                 _carService.DeleteCarModel(id);
             }
             return Redirect("~/admin/carmodels/");
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult AddCarModel()
         {
             return View();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult AddCarModel(string carModelName, int carBrandId)
         {
@@ -144,17 +156,26 @@ namespace sem7_SE_project.Controllers
             return Redirect("~/admin/carmodels/");
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult EditCarModel(int carModelId)
         {
             var carModel = _carService.GetCarModel(carModelId);
             return View(carModel);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult EditCarModel(int carModelId, string carModelName, int carBrandId)
         {
             _carService.UpdateCarModel(carModelId, carModelName, carBrandId);
             return Redirect("~/admin/carmodels/");
+        }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult Cars()
+        {
+            var cars = _carService.GetCars();
+            return View(cars);
         }
     }
 }

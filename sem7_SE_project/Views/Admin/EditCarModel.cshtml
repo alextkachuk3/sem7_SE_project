@@ -27,7 +27,7 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            let selectedCarBrand = @carModel.Brand.Id;
+            let selectedCarBrand = @carModel.Brand!.Id;
 
             $.ajax({
                 type: "GET",
