@@ -246,5 +246,24 @@ namespace sem7_SE_project.Controllers
             return Redirect("~/admin/clients/");
         }
 
+        [Authorize(Roles = "admin")]
+        public IActionResult EditClient(int clientId)
+        {
+            Client? client = _clientService.GetClient(clientId);
+            if (client == null)
+            {
+                return Redirect("~/admin/clients/");
+            }
+            return View(client);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public IActionResult EditClient(int clientId, string firstName, string lastName, string? address, string? phoneNumber, string? email)
+        {
+            _clientService.EditClient(clientId, firstName, lastName, address, phoneNumber, email);
+            return Redirect("~/admin/clients/");
+        }
+
     }
 }

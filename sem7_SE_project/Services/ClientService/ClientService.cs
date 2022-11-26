@@ -54,6 +54,31 @@ namespace sem7_SE_project.Services.ClientService
             }
         }
 
+        public void EditClient(int clientId, string FirstName, string LastName, string? Address, string? PhoneNumber, string? Email)
+        {
+            Client? client = GetClient(clientId);
+
+            if (client != null)
+            {
+                try
+                {
+                    client.FirstName = FirstName;
+                    client.LastName = LastName;
+                    client.Address = Address;
+                    client.PhoneNumber = PhoneNumber;
+                    client.Email = Email;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+                finally
+                {
+                    _dbContext.SaveChanges();
+                }
+            }
+        }
+
         public Client? GetClient(int clientId)
         {
             return _dbContext.Clients!.Where(c => c.Id.Equals(clientId)).FirstOrDefault();

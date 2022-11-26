@@ -11,5 +11,7 @@ namespace sem7_SE_project.Services.ClientService
         public void AddClient(string FirstName, string LastName, string? Address, string? PhoneNumber, string? Email);
 
         public void DeleteClient(int clientId);
+
+        public void EditClient(int clientId, string FirstName, string LastName, string? Address, string? PhoneNumber, string? Email);
     }
 }
