@@ -1,0 +1,71 @@
+﻿@{
+    Car car = Model;
+}
+
+<div class="container-xl">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-8"><h2>Car info</h2></div>
+            </div>
+        </div>
+    </div>
+    <table id="Car" class="table table-striped table-hover table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-6">ID</td>
+                <td class="col-6">@car.Id</td>
+            </tr>
+            <tr>
+                <td class="col-6">Brand</td>
+                <td class="col-6">@car.Model!.Brand!.Name</td>
+            </tr>
+            <tr>
+                <td>Model</td>
+                <td>@car.Model!.Name</td>
+            </tr>
+            <tr>
+                <td>Registration number</td>
+                <td>@car.RegistrationNumber</td>
+            </tr>
+            <tr>
+                <td>Fuel capacity</td>
+                <td>@car.FuelCapacity</td>
+            </tr>
+            <tr>
+                <td>Number of seats</td>
+                <td>@car.NumberOfSeats</td>
+            </tr>
+            <tr>
+                <td>Price</td>
+                <td>@car.Price$</td>
+            </tr>
+            <tr>
+                <td>Mileage</td>
+                <td>@car.Mileage</td>
+            </tr>
+            <tr>
+                <td>Engine type</td>
+                <td>@car.EngineType!.Name</td>
+            </tr>
+            <tr>
+                <td>Embedded devices</td>
+                <td>
+                    @if (car.EmbeddedDevices != null)
+                    {
+                        <ul>
+                        @foreach (EmbeddedDevice embeddedDevice in car.EmbeddedDevices)
+                        {
+                            <li>@embeddedDevice.Name</li>                            
+                        }
+                        </ul>
+                    }
+                    else
+                    {
+                        @:Not specified
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

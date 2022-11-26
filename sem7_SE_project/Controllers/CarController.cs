@@ -8,6 +8,12 @@ namespace sem7_SE_project.Controllers
     {
         private readonly ICarService _carService;
 
+        public IActionResult Index(int carId)
+        {
+            var car = _carService.GetCar(carId);
+            return View(car);
+        }
+
         public CarController(ICarService carService)
         {
             _carService = carService;

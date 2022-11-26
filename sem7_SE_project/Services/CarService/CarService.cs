@@ -153,7 +153,11 @@ namespace sem7_SE_project.Services.CarService
 
         public Car? GetCar(int carId)
         {
-            return _dbContext.Cars!.FirstOrDefault(c => c.Id.Equals(carId));
+            return _dbContext.Cars!.Where(c => c.Id.Equals(carId)).
+                Include(c => c.EngineType).
+                Include(c => c.EmbeddedDevices).
+                Include(c => c.Model).
+                ThenInclude(m => m!.Brand).FirstOrDefault();
         }
 
         public Brand? GetCarBrand(int carBrandId)
