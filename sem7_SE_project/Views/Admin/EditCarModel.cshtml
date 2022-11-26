@@ -1,0 +1,57 @@
+﻿@{
+    Model carModel = Model;
+}
+
+<div class="container">
+    <form method="post">
+        <div class="form-text">
+            <div class="col-sm-8"><h2>Edit car model</h2></div>
+        </div>
+        <input type="hidden" name="carModelId" value="@carModel.Id">
+        <div class="mb-3">
+            <label for="carModelNameInput" class="form-label">Name</label>
+            <input name="carModelName" class="form-control" id="carModelNameInput" value="@carModel.Name">
+        </div>
+
+        <div class="mb-3">
+            <label for="carBrandInput" class="form-label">Brand</label>
+            <select name="carBrandId" id="carBrandInput" class="form-select" aria-label=".form-select-sm example">
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Edit</button>
+    </form>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let selectedCarBrand = @carModel.Brand.Id;
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetCarBrands", "Car")",
+                dataType: "json",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        if (item.id != selectedCarBrand) {
+                            $("#carBrandInput").append($("<option>", {
+                                value: item.id,
+                                text: item.name
+                            }));
+                        }
+                        else {
+                            $("#carBrandInput").append($("<option>", {
+                                value: item.id,
+                                text: item.name
+                            }).attr("selected", "selected"));
+                        }
+
+                    });
+                    console.log(result);
+                }
+            });
+        });
+    </script>
+}

@@ -144,6 +144,17 @@ namespace sem7_SE_project.Controllers
             return Redirect("~/admin/carmodels/");
         }
 
-        
+        public IActionResult EditCarModel(int carModelId)
+        {
+            var carModel = _carService.GetCarModel(carModelId);
+            return View(carModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditCarModel(int carModelId, string carModelName, int carBrandId)
+        {
+            _carService.UpdateCarModel(carModelId, carModelName, carBrandId);
+            return Redirect("~/admin/carmodels/");
+        }
     }
 }

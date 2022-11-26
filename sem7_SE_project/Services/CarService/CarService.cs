@@ -16,7 +16,41 @@ namespace sem7_SE_project.Services.CarService
 
         public void AddCar(int modelId, string registrationNumber, int fuelCapacity, int numberOfSeats, int price, int mileage, int engineTypeId, List<int>? embeddedDevicesIds)
         {
-            throw new NotImplementedException();
+            var car = new Car();
+
+            car.Model = GetCarModel(modelId);
+            car.RegistrationNumber = registrationNumber;
+            car.FuelCapacity = fuelCapacity;
+            car.NumberOfSeats = numberOfSeats;
+            car.Price = price;
+            car.Mileage = mileage;
+            car.EngineType = _dbContext.EngineTypes!.FirstOrDefault(e => e.Id.Equals(engineTypeId));
+
+            if (embeddedDevicesIds != null)
+            {
+                car.EmbeddedDevices = new List<EmbeddedDevice>();
+
+                foreach (var id in embeddedDevicesIds)
+                {
+                    var embeddedDevice = _dbContext.EmbeddedDevices!.FirstOrDefault(d => d.Id.Equals(id));
+                    if (embeddedDevice != null)
+                    {
+                        car.EmbeddedDevices.Add(embeddedDevice);
+                    }
+                }
+            }
+            try
+            {
+                _dbContext.Cars!.Add(car);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                _dbContext.SaveChanges();
+            }
         }
 
         public void AddCarBrand(string name)
@@ -104,7 +138,7 @@ namespace sem7_SE_project.Services.CarService
 
         public Car? GetCar(int carId)
         {
-            throw new NotImplementedException();
+            return _dbContext.Cars!.FirstOrDefault(c => c.Id.Equals(carId));
         }
 
         public Brand? GetCarBrand(int carBrandId)
@@ -119,7 +153,7 @@ namespace sem7_SE_project.Services.CarService
 
         public Model? GetCarModel(int carModelId)
         {
-            return _dbContext.Models!.FirstOrDefault(m => m.Id.Equals(carModelId));
+            return _dbContext.Models!.Where(m => m.Id.Equals(carModelId)).Include(m => m.Brand).FirstOrDefault();
         }
 
         public List<Model> GetCarModels()
@@ -129,12 +163,75 @@ namespace sem7_SE_project.Services.CarService
 
         public List<Car> GetCars()
         {
-            throw new NotImplementedException();
+            return _dbContext.Cars!.Include(c => c.EmbeddedDevices).Include(c => c.Model).ThenInclude(m => m!.Brand).ToList();
         }
 
         public void UpdateCar(int carId, int? modelId, string? registrationNumber, int? fuelCapacity, int? numberOfSeats, int? price, int? mileage, int? engineTypeId, List<int>? embeddedDevicesIds)
         {
-            throw new NotImplementedException();
+            var car = _dbContext.Cars!.FirstOrDefault(c => c.Id.Equals(carId));
+
+            if (car != null)
+            {
+                try
+                {
+                    if (modelId != null)
+                    {
+                        car.Model = GetCarModel((int)modelId);
+                    }
+                    if (registrationNumber != null)
+                    {
+                        car.RegistrationNumber = registrationNumber;
+                    }
+                    if (fuelCapacity != null)
+                    {
+                        car.FuelCapacity = (int)fuelCapacity;
+                    }
+                    if (numberOfSeats != null)
+                    {
+                        car.NumberOfSeats = (int)numberOfSeats;
+                    }
+                    if (price != null)
+                    {
+                        car.Price = (int)price;
+                    }
+                    if (mileage != null)
+                    {
+                        car.Mileage = (int)mileage;
+                    }
+                    if (engineTypeId != null)
+                    {
+                        car.EngineType = _dbContext.EngineTypes!.FirstOrDefault(e => e.Id.Equals(engineTypeId));
+                    }
+                    if (embeddedDevicesIds != null)
+                    {
+                        if (car.EmbeddedDevices != null)
+                        {
+                            car.EmbeddedDevices.Clear();
+                        }
+                        else
+                        {
+                            car.EmbeddedDevices = new List<EmbeddedDevice>();
+                        }
+                        foreach (var id in embeddedDevicesIds)
+                        {
+                            var embeddedDevice = _dbContext.EmbeddedDevices!.FirstOrDefault(d => d.Id.Equals(id));
+                            if (embeddedDevice != null)
+                            {
+                                car.EmbeddedDevices.Add(embeddedDevice);
+                            }
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+                finally
+                {
+                    _dbContext.SaveChanges();
+                }
+            }
         }
 
         public void UpdateCarBrand(int carBrandId, string? name)
@@ -159,7 +256,29 @@ namespace sem7_SE_project.Services.CarService
 
         public void UpdateCarModel(int carModelId, string? name, int? carBrandId)
         {
-            throw new NotImplementedException();
+            var model = GetCarModel(carModelId);
+            try
+            {
+                if (model != null)
+                {
+                    if (name != null)
+                    {
+                        model.Name = name;
+                    }
+                    if (carBrandId != null)
+                    {
+                        model.Brand = GetCarBrand((int)carBrandId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                _dbContext.SaveChanges();
+            }
         }
     }
 }
