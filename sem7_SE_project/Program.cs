@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using sem7_SE_project.Data;
 using sem7_SE_project.Services.CarService;
 using sem7_SE_project.Services.ClientService;
+using sem7_SE_project.Services.OrderService;
 using sem7_SE_project.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 

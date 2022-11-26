@@ -8,6 +8,7 @@ using sem7_SE_project.Services.CarService;
 using Microsoft.AspNetCore.Authorization;
 using sem7_SE_project.Services.ClientService;
 using System.ComponentModel.DataAnnotations;
+using sem7_SE_project.Services.OrderService;
 
 namespace sem7_SE_project.Controllers
 {
@@ -17,13 +18,15 @@ namespace sem7_SE_project.Controllers
         private readonly IUserService _userService;
         private readonly ICarService _carService;
         private readonly IClientService _clientService;
+        private readonly IOrderService _orderService;
 
-        public AdminController(ILogger<AdminController> logger, IUserService userService, ICarService carService, IClientService clientService)
+        public AdminController(ILogger<AdminController> logger, IUserService userService, ICarService carService, IClientService clientService, IOrderService orderService)
         {
             _logger = logger;
             _userService = userService;
             _carService = carService;
             _clientService = clientService;
+            _orderService = orderService;
         }
 
         public IActionResult Index()
@@ -263,6 +266,13 @@ namespace sem7_SE_project.Controllers
         {
             _clientService.EditClient(clientId, firstName, lastName, address, phoneNumber, email);
             return Redirect("~/admin/clients/");
+        }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult Orders()
+        {
+            List<Order> orders = _orderService.GetOrders();
+            return View(orders);
         }
 
     }

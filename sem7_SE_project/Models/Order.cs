@@ -18,5 +18,8 @@ namespace sem7_SE_project.Models
         [Required]
         public DateTime CreationDateTime { get; set; }
 
+        [Required]
+        public OrderStatus? OrderStatus { get; set; }
+
     }
 }
