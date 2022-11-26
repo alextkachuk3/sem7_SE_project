@@ -45,5 +45,7 @@ namespace sem7_SE_project.Services.CarService
 
         public void UpdateCar(int carId, int? modelId, string? registrationNumber, int? fuelCapacity, int? numberOfSeats, int? price, int? mileage, int? engineTypeId, List<int>? embeddedDevicesIds);
 
+        public List<Car> SearchCars(string? searchWord);
+
     }
 }

@@ -8,6 +8,8 @@ namespace sem7_SE_project.Services.OrderService
 
         List<Order> GetOrders();
 
+        void AddOrder(int clientId, int carId, bool testDriveNeeded, int orderStatusId);
+
         void DeleteOrder(int orderId);
 
     }

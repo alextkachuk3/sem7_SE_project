@@ -286,5 +286,18 @@ namespace sem7_SE_project.Controllers
             return Redirect("~/admin/orders/");
         }
 
+        [Authorize(Roles = "admin")]
+        public IActionResult AddOrder()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public IActionResult AddOrder(int clientId, int carId, bool testDriveNeeded, int orderStatusId)
+        {
+            _orderService.AddOrder(clientId, carId, testDriveNeeded, orderStatusId);
+            return Redirect("~/admin/orders/");
+        }
     }
 }

@@ -88,5 +88,24 @@ namespace sem7_SE_project.Services.ClientService
         {
             return _dbContext.Clients!.ToList();
         }
+
+        public List<Client> SearchClients(string? searchWord)
+        {
+            if (searchWord != null)
+            {
+                searchWord = searchWord.ToLower();
+                return _dbContext.Clients!.Where(c =>
+                    c.FirstName!.ToLower().Contains(searchWord) ||
+                    c.LastName!.ToLower().Contains(searchWord) ||
+                    c.Address!.ToLower().Contains(searchWord) ||
+                    c.PhoneNumber!.Contains(searchWord) ||
+                    c.Email!.Contains(searchWord)
+                    ).ToList();
+            }
+            else
+            {
+                return new List<Client>();
+            }
+        }
     }
 }

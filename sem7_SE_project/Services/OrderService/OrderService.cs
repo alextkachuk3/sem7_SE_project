@@ -13,10 +13,33 @@ namespace sem7_SE_project.Services.OrderService
             _dbContext = dbContext;
         }
 
+        public void AddOrder(int clientId, int carId, bool testDriveNeeded, int orderStatusId)
+        {
+            Order order = new Order();
+            order.Client = _dbContext.Clients!.FirstOrDefault(c => c.Id.Equals(clientId));
+            order.Car = _dbContext.Cars!.FirstOrDefault(c => c.Id.Equals(carId));
+            order.IsTestDriveNeeded = testDriveNeeded;
+            order.OrderStatus = _dbContext.OrderStatuses!.FirstOrDefault(s => s.Id.Equals(orderStatusId));
+            order.CreationDateTime = DateTime.Now;
+
+            try
+            {
+                _dbContext.Orders!.Add(order);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                _dbContext.SaveChanges();
+            }
+        }
+
         public void DeleteOrder(int orderId)
         {
             Order? order = _dbContext.Orders!.FirstOrDefault(o => o.Id.Equals(orderId));
-            if(order != null)
+            if (order != null)
             {
                 try
                 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using sem7_SE_project.Data;
 using sem7_SE_project.Models;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace sem7_SE_project.Services.CarService
@@ -208,6 +209,24 @@ namespace sem7_SE_project.Services.CarService
         public List<EngineType> GetEngineTypes(string searchWord)
         {
             return _dbContext.EngineTypes!.Where(t => t.Name!.Contains(searchWord)).ToList();
+        }
+
+        public List<Car> SearchCars(string? searchWord)
+        {
+            if (searchWord != null)
+            {
+                searchWord = searchWord.ToLower();
+                return _dbContext.Cars!.Include(c => c.Model).ThenInclude(m => m!.Brand).Where(c =>
+                c.RegistrationNumber!.ToLower().Contains(searchWord) ||
+                c.Model!.Name!.ToLower().Contains(searchWord) ||
+                c.Model!.Brand!.Name!.ToLower().Contains(searchWord)
+                ).ToList();
+            }
+            else
+            {
+                return new List<Car>();
+            }
+            
         }
 
         public void UpdateCar(int carId, int? modelId, string? registrationNumber, int? fuelCapacity, int? numberOfSeats, int? price, int? mileage, int? engineTypeId, List<int>? embeddedDevicesIds)

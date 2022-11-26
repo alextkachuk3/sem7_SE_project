@@ -67,5 +67,15 @@ namespace sem7_SE_project.Controllers
                 text = s.Name
             }));
         }
+
+        [HttpPost]
+        public JsonResult SearchCars(string? searchWord)
+        {
+            return new JsonResult(_carService.SearchCars(searchWord).Select(s => new
+            {
+                id = s.Id,
+                text = s.Model!.Brand!.Name! + " " + s.Model!.Name! + " | " + s.RegistrationNumber
+            }));
+        }
     }
 }
