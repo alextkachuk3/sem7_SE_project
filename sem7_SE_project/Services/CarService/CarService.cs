@@ -20,7 +20,21 @@ namespace sem7_SE_project.Services.CarService
 
         public void AddCarBrand(string name)
         {
-            throw new NotImplementedException();
+            Brand brand = new Brand();
+            brand.Name = name;
+            try
+            {
+                _dbContext.Brands!.Add(brand);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                _dbContext.SaveChanges();
+            }
+            
         }
 
         public void AddCarModel(int carBrandId, string name)

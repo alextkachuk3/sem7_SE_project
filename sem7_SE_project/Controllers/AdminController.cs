@@ -72,7 +72,7 @@ namespace sem7_SE_project.Controllers
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync();
-            return LocalRedirect("~/");
+            return Redirect("~/");
         }
 
         public IActionResult CarBrands()
@@ -81,10 +81,39 @@ namespace sem7_SE_project.Controllers
             return View(brands);
         }
 
-        public IActionResult DeleteCarBrand(int carBrandId)
+        [HttpPost]
+        public IActionResult CarBrands(List<int> carBrandsIds)
         {
-            _carService.DeleteCarBrand(carBrandId);
-            return LocalRedirect("~/admin/carbrands/");
+            foreach(var id in carBrandsIds)
+            {
+                _carService.DeleteCarBrand(id);
+            }            
+            return Redirect("~/admin/carbrands/");
+        }
+
+        public IActionResult AddCarBrand()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddCarBrand(string carBrandName)
+        {
+            _carService.AddCarBrand(carBrandName);
+            return Redirect("~/admin/carbrands/");
+        }
+
+        public IActionResult EditCarBrand(int carBrandId)
+        {
+            var brand = _carService.GetCarBrand(carBrandId);
+            return View(brand);
+        }
+
+        [HttpPost]
+        public IActionResult EditCarBrand(int carBrandId, string carBrandName)
+        {
+            _carService.UpdateCarBrand(carBrandId, carBrandName);
+            return Redirect("~/admin/carbrands/");
         }
     }
 }

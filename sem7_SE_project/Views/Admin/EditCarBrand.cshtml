@@ -1,0 +1,22 @@
+﻿@{
+    Brand brand = Model;
+}
+
+<div class="container">
+    <form method="post">
+        <div class="form-text">
+            <div class="row">
+                <div class="col-sm-8"><h2>Edit car brand</h2></div>
+            </div>
+        </div>
+        <input type="hidden" name="carBrandId" value="@brand.Id">
+        <div class="mb-3">
+            <label for="carBrandNameInput" class="form-label">Title</label>
+            <input name="carBrandName" class="form-control" id="carBrandNameInput" value="@brand.Name">
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary btn-block">Add</button>
+        </div>
+    </form>
+</div>
