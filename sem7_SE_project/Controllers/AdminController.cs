@@ -6,6 +6,8 @@ using System.Security.Claims;
 using sem7_SE_project.Services.UserService;
 using sem7_SE_project.Services.CarService;
 using Microsoft.AspNetCore.Authorization;
+using sem7_SE_project.Services.ClientService;
+using System.ComponentModel.DataAnnotations;
 
 namespace sem7_SE_project.Controllers
 {
@@ -14,12 +16,14 @@ namespace sem7_SE_project.Controllers
         private readonly ILogger<AdminController> _logger;
         private readonly IUserService _userService;
         private readonly ICarService _carService;
+        private readonly IClientService _clientService;
 
-        public AdminController(ILogger<AdminController> logger, IUserService userService, ICarService carService)
+        public AdminController(ILogger<AdminController> logger, IUserService userService, ICarService carService, IClientService clientService)
         {
             _logger = logger;
             _userService = userService;
             _carService = carService;
+            _clientService = clientService;
         }
 
         public IActionResult Index()
@@ -208,6 +212,38 @@ namespace sem7_SE_project.Controllers
         {
             _carService.UpdateCar(carId, carModelId, registrationNumber, fuelCapacity, numberOfSeats, price, mileage, engineTypeId, embeddedDevicesIds);
             return Redirect("~/admin/cars/");
+        }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult Clients()
+        {
+            var clients = _clientService.GetClients();
+            return View(clients);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public IActionResult Clients(List<int> clientsIds)
+        {
+            foreach (var id in clientsIds)
+            {
+                _clientService.DeleteClient(id);
+            }
+            return Redirect("~/admin/clients/");
+        }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult AddClient()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public IActionResult AddClient(string firstName, string lastName, string? address, string? phoneNumber, string? email)
+        {
+            _clientService.AddClient(firstName, lastName, address, phoneNumber, email);
+            return Redirect("~/admin/clients/");
         }
 
     }
