@@ -121,5 +121,29 @@ namespace sem7_SE_project.Controllers
             var carModels =  _carService.GetCarModels();
             return View(carModels);
         }
+
+        [HttpPost]
+        public IActionResult CarModels(List<int> carModelsIds)
+        {
+            foreach(var id in carModelsIds)
+            {
+                _carService.DeleteCarModel(id);
+            }
+            return Redirect("~/admin/carmodels/");
+        }
+
+        public IActionResult AddCarModel()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddCarModel(string carModelName, int carBrandId)
+        {
+            _carService.AddCarModel(carBrandId, carModelName);
+            return Redirect("~/admin/carmodels/");
+        }
+
+        
     }
 }

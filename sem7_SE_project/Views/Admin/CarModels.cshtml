@@ -27,7 +27,7 @@
                             {
                                 <tr>
                                     <td class="text-center">
-                                        <input name="carBrandsIds" class="form-check-input" type="checkbox" value="@carModel.Id" id="vacancyIdInput- + @carModel.Id">
+                                        <input name="carModelsIds" class="form-check-input" type="checkbox" value="@carModel.Id" id="carModelIdInput- + @carModel.Id">
                                     </td>
                                     <td>
                                         @carModel.Name
@@ -44,7 +44,7 @@
                         </tbody>
                     </table>
                 }
-                <a asp-area="" asp-controller="admin" asp-action="addcarmodel" class="btn btn-success">Add brand</a>
+                <a asp-area="" asp-controller="admin" asp-action="addcarmodel" class="btn btn-success">Add model</a>
 
                 <button type="submit" class="btn btn-danger">Remove selected</button>
 

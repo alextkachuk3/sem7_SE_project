@@ -35,12 +35,26 @@ namespace sem7_SE_project.Services.CarService
             {
                 _dbContext.SaveChanges();
             }
-            
+
         }
 
         public void AddCarModel(int carBrandId, string name)
         {
-            throw new NotImplementedException();
+            Model model = new Model();
+            model.Name = name;
+            model.Brand = _dbContext.Brands!.FirstOrDefault(b => b.Id.Equals(carBrandId));
+            try
+            {
+                _dbContext.Models!.Add(model);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                _dbContext.SaveChanges();
+            }
         }
 
         public void DeleteCar(int carId)
@@ -70,7 +84,22 @@ namespace sem7_SE_project.Services.CarService
 
         public void DeleteCarModel(int carModelId)
         {
-            throw new NotImplementedException();
+            var model = GetCarModel(carModelId);
+            try
+            {
+                if (model != null)
+                {
+                    _dbContext.Models!.Remove(model);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                _dbContext.SaveChanges();
+            }
         }
 
         public Car? GetCar(int carId)
@@ -90,7 +119,7 @@ namespace sem7_SE_project.Services.CarService
 
         public Model? GetCarModel(int carModelId)
         {
-            throw new NotImplementedException();
+            return _dbContext.Models!.FirstOrDefault(m => m.Id.Equals(carModelId));
         }
 
         public List<Model> GetCarModels()
@@ -125,7 +154,7 @@ namespace sem7_SE_project.Services.CarService
             finally
             {
                 _dbContext.SaveChanges();
-            }            
+            }
         }
 
         public void UpdateCarModel(int carModelId, string? name, int? carBrandId)
