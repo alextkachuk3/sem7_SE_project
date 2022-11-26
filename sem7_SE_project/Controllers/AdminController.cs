@@ -115,5 +115,11 @@ namespace sem7_SE_project.Controllers
             _carService.UpdateCarBrand(carBrandId, carBrandName);
             return Redirect("~/admin/carbrands/");
         }
+
+        public IActionResult CarModels()
+        {
+            var carModels =  _carService.GetCarModels();
+            return View(carModels);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using sem7_SE_project.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using sem7_SE_project.Data;
 using sem7_SE_project.Models;
 using System.Xml.Linq;
 
@@ -94,7 +95,7 @@ namespace sem7_SE_project.Services.CarService
 
         public List<Model> GetCarModels()
         {
-            throw new NotImplementedException();
+            return _dbContext.Models!.Include(m => m.Brand).ToList();
         }
 
         public List<Car> GetCars()
