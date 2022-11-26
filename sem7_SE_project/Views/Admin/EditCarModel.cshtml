@@ -10,12 +10,12 @@
         <input type="hidden" name="carModelId" value="@carModel.Id">
         <div class="mb-3">
             <label for="carModelNameInput" class="form-label">Name</label>
-            <input name="carModelName" class="form-control" id="carModelNameInput" value="@carModel.Name">
+            <input name="carModelName" class="form-control" id="carModelNameInput" value="@carModel.Name" required>
         </div>
 
         <div class="mb-3">
             <label for="carBrandInput" class="form-label">Brand</label>
-            <select name="carBrandId" id="carBrandInput" class="form-select" aria-label=".form-select-sm example">
+            <select name="carBrandId" id="carBrandInput" class="form-select" aria-label=".form-select-sm example" required>
             </select>
         </div>
 
