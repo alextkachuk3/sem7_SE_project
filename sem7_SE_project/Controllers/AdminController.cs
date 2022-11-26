@@ -6,7 +6,6 @@ using System.Security.Claims;
 using sem7_SE_project.Services.UserService;
 using sem7_SE_project.Services.CarService;
 using Microsoft.AspNetCore.Authorization;
-using System.Data;
 
 namespace sem7_SE_project.Controllers
 {
@@ -192,6 +191,24 @@ namespace sem7_SE_project.Controllers
             return Redirect("~/admin/cars/");
         }
 
+        [Authorize(Roles = "admin")]
+        public IActionResult EditCar(int carId)
+        {
+            Car? car = _carService.GetCar(carId);
+            if (car == null)
+            {
+                return Redirect("~/admin/cars/");
+            }
+            return View(car);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public IActionResult EditCar(int carId, int carModelId, string registrationNumber, int fuelCapacity, int numberOfSeats, int price, int mileage, int engineTypeId, List<int>? embeddedDevicesIds)
+        {
+            _carService.UpdateCar(carId, carModelId, registrationNumber, fuelCapacity, numberOfSeats, price, mileage, engineTypeId, embeddedDevicesIds);
+            return Redirect("~/admin/cars/");
+        }
 
     }
 }

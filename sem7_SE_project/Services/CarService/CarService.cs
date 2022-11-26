@@ -212,7 +212,7 @@ namespace sem7_SE_project.Services.CarService
 
         public void UpdateCar(int carId, int? modelId, string? registrationNumber, int? fuelCapacity, int? numberOfSeats, int? price, int? mileage, int? engineTypeId, List<int>? embeddedDevicesIds)
         {
-            var car = _dbContext.Cars!.FirstOrDefault(c => c.Id.Equals(carId));
+            var car = GetCar(carId);
 
             if (car != null)
             {
