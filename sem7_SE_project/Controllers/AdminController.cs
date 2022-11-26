@@ -275,5 +275,16 @@ namespace sem7_SE_project.Controllers
             return View(orders);
         }
 
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public IActionResult Orders(List<int> ordersIds)
+        {
+            foreach (var id in ordersIds)
+            {
+                _orderService.DeleteOrder(id);
+            }
+            return Redirect("~/admin/orders/");
+        }
+
     }
 }

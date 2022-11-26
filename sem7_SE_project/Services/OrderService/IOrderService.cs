@@ -7,5 +7,8 @@ namespace sem7_SE_project.Services.OrderService
         List<OrderStatus> GetOrderStatuses();
 
         List<Order> GetOrders();
+
+        void DeleteOrder(int orderId);
+
     }
 }

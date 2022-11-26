@@ -13,6 +13,26 @@ namespace sem7_SE_project.Services.OrderService
             _dbContext = dbContext;
         }
 
+        public void DeleteOrder(int orderId)
+        {
+            Order? order = _dbContext.Orders!.FirstOrDefault(o => o.Id.Equals(orderId));
+            if(order != null)
+            {
+                try
+                {
+                    _dbContext.Orders!.Remove(order);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+                finally
+                {
+                    _dbContext.SaveChanges();
+                }
+            }
+        }
+
         public List<Order> GetOrders()
         {
             return _dbContext.Orders!.Include(o => o.Car).ThenInclude(c => c!.Model).ThenInclude(m => m!.Brand).Include(o => o.Client).Include(o => o.OrderStatus).ToList();
