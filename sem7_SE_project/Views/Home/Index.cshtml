@@ -2,29 +2,40 @@
 <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
 
 @{
-    List<Car>? cars = Model;
+    Tuple<List<Car>?, int> carsTuple = Model;
+    List<Car>? cars = carsTuple.Item1;
+    int carsCount = carsTuple.Item2;
+    int pageCount = (carsCount / 10);
+    if (carsCount % 10 != 0)
+    {
+        pageCount++;
+    }
+    var qs = System.Web.HttpUtility.ParseQueryString(Url.ActionContext.HttpContext.Request.QueryString.ToString());
 }
 
 <div class="container">
     <div class="row">
-        <div class="col-8">
-            <div>
-                <div class="table-wrapper">
-                    <div class="table-title">
-                        <div class="row">
-                            <div class="col-sm-8"><h2>Cars</h2></div>
-                        </div>
-                    </div>
-                        @if (cars.Count > 0)
-                        {
+        <div class="col-xxl-8 col-sm-12">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Cars</h2></div>
+                </div>
+            </div>
+
+            @if (cars != null)
+            {
+                @if (cars.Count > 0)
+                {
+                    <div class="row">
+                        <div class="col-12">
                             <table id="Cars" class="table table-striped table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th class="col-2">Brand</th>
                                         <th class="col-2">Model</th>
-                                        <th class="col-3">Registration number</th>
+                                        <th class="col-2">Registration number</th>
                                         <th class="col-2">Engine</th>
-                                        <th class="col-2">Mileage</th>
+                                        <th class="col-1">Mileage</th>
                                         <th class="col-2">Price</th>
                                         <th class="col-1"></th>
                                     </tr>
@@ -33,36 +44,58 @@
                                     @foreach (Car car in cars)
                                     {
                                         <tr>
-                                            <td>
+                                            <td class="col-2">
                                                 @car.Model!.Brand!.Name
                                             </td>
-                                            <td>
+                                            <td class="col-2">
                                                 @car.Model!.Name
                                             </td>
-                                            <td>
+                                            <td class="col-2">
                                                 @car.RegistrationNumber
                                             </td>
-                                            <td>
+                                            <td class="col-2">
                                                 @car.EngineType!.Name, @car.FuelCapacity L
                                             </td>
-                                            <td>
+                                            <td class="col-1">
                                                 @car.Mileage
                                             </td>
-                                            <td>
+                                            <td class="col-2">
                                                 @car.Price
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-center col-1">
                                                 <a href="@Url.Action("index", "car")?carId=@car.Id" class="view" title="" data-toggle="tooltip" data-original-title="View"><i class="material-icons"></i></a>
                                             </td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
-                        }
-                </div>
-            </div>
+                        </div>
+                    </div>
+                    <nav>
+                        <ul class="pagination">
+                            @for (int i = 0; i < pageCount; i++)
+                            {
+                                @if (i == 10)
+                                {
+                                    <li class="page-item">...</li>
+                                    qs.Set("page", pageCount.ToString());
+                                    <li class="page-item"><a class="page-link" href="@Url.Action("Index", "Home")?@qs.ToString()">@(i + 1)</a></li>
+                                    break;
+                                }
+                                qs.Set("page", i.ToString());
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "Home")?@qs.ToString()">@(i + 1)</a></li>
+                            }
+                        </ul>
+                    </nav>
+                }
+            }
+            else
+            {
+                @:Cars not found
+            }
+
         </div>
-        <div class="col-4 bg-opacity-10 bg-secondary">
+        <div class="col-xxl-4 col-sm-12 bg-opacity-10 bg-secondary">
             <form method="get">
                 <div>
                     <div class="row text-center p-1">

@@ -227,7 +227,7 @@ namespace sem7_SE_project.Services.CarService
 
         }
 
-        public List<Car>? SearchCars(int? page, int? minPrice, int? maxPrice, int? brandId, int? engineTypeId, int? minFuelCapacity, int? maxFuelCapacity, List<int>? embeddedDevicesIds)
+        public Tuple<List<Car>?, int> SearchCars(int? page, int? minPrice, int? maxPrice, int? brandId, int? engineTypeId, int? minFuelCapacity, int? maxFuelCapacity, List<int>? embeddedDevicesIds)
         {
             var result = _dbContext.Cars!.AsQueryable<Car>();
             if (minPrice != null)
@@ -261,21 +261,23 @@ namespace sem7_SE_project.Services.CarService
                     result = result.Where(c => c.EmbeddedDevices!.Any(d => embeddedDevicesIds.Contains(d.Id)));
                 }
             }
+
+            int totalCount = result.Count();
+
             if (page != null)
             {
                 result = result.Skip((int)(page * 10)).Take(10);
             }
+            else
             {
                 result = result.Take(10);
             }
 
-            var f = result.ToList();
-
-            return result
+            return new Tuple<List<Car>?, int>(result
                 .Include(c => c.EngineType)
                 .Include(c => c.Model)
                 .ThenInclude(m => m!.Brand)
-                .ToList();
+                .ToList(), totalCount);
         }
 
         public void UpdateCar(int carId, int? modelId, string? registrationNumber, int? fuelCapacity, int? numberOfSeats, int? price, int? mileage, int? engineTypeId, List<int>? embeddedDevicesIds)

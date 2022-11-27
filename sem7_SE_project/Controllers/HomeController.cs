@@ -17,8 +17,8 @@ namespace sem7_SE_project.Controllers
 
         public IActionResult Index(int? page, int? minPrice, int? maxPrice, int? brandId, int? engineTypeId, int? minFuelCapacity, int? maxFuelCapacity, List<int>? embeddedDevicesIds)
         {
-            List<Car>? cars = _carService.SearchCars(page, minPrice, maxPrice, brandId, engineTypeId, minFuelCapacity, maxFuelCapacity, embeddedDevicesIds);
-            return View(cars);
+            Tuple<List<Car>?, int> carsTuple = _carService.SearchCars(page, minPrice, maxPrice, brandId, engineTypeId, minFuelCapacity, maxFuelCapacity, embeddedDevicesIds);
+            return View(carsTuple);
         }
     }
 }
