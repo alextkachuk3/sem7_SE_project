@@ -236,6 +236,20 @@ namespace sem7_SE_project.Controllers
         }
 
         [Authorize(Roles = "admin")]
+        public IActionResult Client(int clientId)
+        {
+            Client? client = _clientService.GetClient(clientId);
+            if (client != null)
+            {
+                return View(client);
+            }
+            else
+            {
+                return Redirect("~/admin/clients/");                
+            }
+        }
+
+        [Authorize(Roles = "admin")]
         public IActionResult AddClient()
         {
             return View();

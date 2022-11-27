@@ -1,0 +1,69 @@
+﻿@{
+    Client client = Model;
+}
+
+<div class="container-xl">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-8"><h2>Client info</h2></div>
+            </div>
+        </div>
+    </div>
+    <table id="Car" class="table table-striped table-hover table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-6">ID</td>
+                <td class="col-6">@client.Id</td>
+            </tr>
+            <tr>
+                <td class="col-6">First name</td>
+                <td class="col-6">@client.FirstName</td>
+            </tr>
+            <tr>
+                <td class="col-6">Last name</td>
+                <td class="col-6">@client.LastName</td>
+            </tr>
+            <tr>
+                <td class="col-6">Address</td>
+                <td class="col-6">
+                    @if (client.Address != null)
+                    {
+                        @client.Address
+                    }
+                    else
+                    {
+                        @:Not specified
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td class="col-6">Email</td>
+                <td class="col-6">
+                    @if (client.Email != null)
+                    {
+                        @client.Email
+                    }
+                    else
+                    {
+                        @:Not specified
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td class="col-6">Phone number</td>
+                <td class="col-6">
+                    @if (client.PhoneNumber != null)
+                    {
+                        @client.PhoneNumber
+                    }
+                    else
+                    {
+                        @:Not specified
+                    }
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
