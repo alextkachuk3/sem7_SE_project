@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using sem7_SE_project.Data;
 using sem7_SE_project.Models;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace sem7_SE_project.Services.CarService
 {
@@ -226,7 +224,58 @@ namespace sem7_SE_project.Services.CarService
             {
                 return new List<Car>();
             }
-            
+
+        }
+
+        public List<Car>? SearchCars(int? page, int? minPrice, int? maxPrice, int? brandId, int? engineTypeId, int? minFuelCapacity, int? maxFuelCapacity, List<int>? embeddedDevicesIds)
+        {
+            var result = _dbContext.Cars!.AsQueryable<Car>();
+            if (minPrice != null)
+            {
+                result = result.Where(c => c.Price >= minPrice);
+            }
+            if (maxPrice != null)
+            {
+                result = result.Where(c => c.Price <= maxPrice);
+            }
+            if (brandId != null)
+            {
+                result = result.Where(c => c.Model!.Brand!.Id.Equals(brandId));
+            }
+            if (engineTypeId != null)
+            {
+                result = result.Where(c => c.EngineType!.Id.Equals(engineTypeId));
+            }
+            if (minFuelCapacity != null)
+            {
+                result = result.Where(c => c.FuelCapacity >= minFuelCapacity);
+            }
+            if (maxFuelCapacity != null)
+            {
+                result = result.Where(c => c.FuelCapacity <= maxFuelCapacity);
+            }
+            if (embeddedDevicesIds != null)
+            {
+                if (embeddedDevicesIds.Count != 0)
+                {
+                    result = result.Where(c => c.EmbeddedDevices!.Any(d => embeddedDevicesIds.Contains(d.Id)));
+                }
+            }
+            if (page != null)
+            {
+                result = result.Skip((int)(page * 10)).Take(10);
+            }
+            {
+                result = result.Take(10);
+            }
+
+            var f = result.ToList();
+
+            return result
+                .Include(c => c.EngineType)
+                .Include(c => c.Model)
+                .ThenInclude(m => m!.Brand)
+                .ToList();
         }
 
         public void UpdateCar(int carId, int? modelId, string? registrationNumber, int? fuelCapacity, int? numberOfSeats, int? price, int? mileage, int? engineTypeId, List<int>? embeddedDevicesIds)

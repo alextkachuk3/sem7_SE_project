@@ -1,7 +1,209 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿<link href="~/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+
+@{
+    List<Car>? cars = Model;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div>
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-8"><h2>Cars</h2></div>
+                        </div>
+                    </div>
+                        @if (cars.Count > 0)
+                        {
+                            <table id="Cars" class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="col-2">Brand</th>
+                                        <th class="col-2">Model</th>
+                                        <th class="col-3">Registration number</th>
+                                        <th class="col-2">Engine</th>
+                                        <th class="col-2">Mileage</th>
+                                        <th class="col-2">Price</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (Car car in cars)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @car.Model!.Brand!.Name
+                                            </td>
+                                            <td>
+                                                @car.Model!.Name
+                                            </td>
+                                            <td>
+                                                @car.RegistrationNumber
+                                            </td>
+                                            <td>
+                                                @car.EngineType!.Name, @car.FuelCapacity L
+                                            </td>
+                                            <td>
+                                                @car.Mileage
+                                            </td>
+                                            <td>
+                                                @car.Price
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="@Url.Action("index", "car")?carId=@car.Id" class="view" title="" data-toggle="tooltip" data-original-title="View"><i class="material-icons"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                </div>
+            </div>
+        </div>
+        <div class="col-4 bg-opacity-10 bg-secondary">
+            <form method="get">
+                <div>
+                    <div class="row text-center p-1">
+                        <label class="form-label">Price</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="minPriceInput" class="col-3 col-form-label">Min</label>
+                                <div class="col-9">
+                                    <input class="form-control" name="minPrice" type="text" id="minPriceInput">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="maxPriceInput" class="col-3 col-form-label">Max</label>
+                                <div class="col-9">
+                                    <input class="form-control" name="maxPrice" type="text" id="maxPriceInput">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <div class="row text-center p-1">
+                        <label class="form-label">Brand</label>
+                    </div>
+                    <select name="brandId" id="brandInput" class="form-select" aria-label=".form-select-sm example">
+                        <option></option>
+                    </select>
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <div class="row text-center p-1">
+                        <label class="form-label">Engine type</label>
+                    </div>
+                    <select name="engineTypeId" id="engineTypeInput" class="form-select" aria-label=".form-select-sm example">
+                        <option></option>
+                    </select>
+                </div>
+                <hr>
+                <div>
+                    <div class="row text-center p-1">
+                        <label class="form-label">Fuel capacity</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="minFuelCapacityInput" class="col-3 col-form-label">Min</label>
+                                <div class="col-9">
+                                    <input class="form-control" name="minFuelCapacity" type="text" id="minFuelCapacityInput">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="maxFuelCapacityInput" class="col-3 col-form-label">Max</label>
+                                <div class="col-9">
+                                    <input class="form-control" name="maxFuelCapacity" type="text" id="maxFuelCapacityInput">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <div class="row text-center p-1">
+                        <label class="form-label">Embedded devices</label>
+                    </div>
+                    <div class="row">
+                        <select name="embeddedDevicesIds" id="embeddedDevicesInput" class="form-select" aria-label=".form-select-sm example" multiple="multiple">
+                        </select>
+                    </div>
+
+                </div>
+                <hr>
+                <div class="p-2">
+                    <button type="submit" class="btn btn-primary ">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetCarBrands", "Car")",
+                dataType: "json",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#brandInput").append($("<option>", {
+                            value: item.id,
+                            text: item.name
+                        }));
+                    });
+                    console.log(result);
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetEngineTypes", "Car")",
+                dataType: "json",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#engineTypeInput").append($("<option>", {
+                            value: item.id,
+                            text: item.name
+                        }));
+                    });
+                    console.log(result);
+                }
+            });
+
+            $("#embeddedDevicesInput").select2({
+                style: "bootstrap5",
+                placeholder: "Select",
+                ajax: {
+                    type: "POST",
+                    url: "@Url.Action("GetEmbeddedDevices", "Car")",
+                    dataType: "json",
+                    data: function (params) {
+                        return {
+                            searchWord: params.term
+                        };
+                    },
+                    processResults: function (data, params) {
+                        console.log(data);
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+        });
+    </script>
+}

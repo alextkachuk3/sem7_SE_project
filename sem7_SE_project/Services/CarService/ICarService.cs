@@ -47,5 +47,7 @@ namespace sem7_SE_project.Services.CarService
 
         public List<Car> SearchCars(string? searchWord);
 
+        public List<Car>? SearchCars(int? page, int? minPrice, int? maxPrice, int? brandId, int? engineTypeId, int? minFuelCapacity, int? maxFuelCapacity, List<int>? embeddedDevicesIds);
+
     }
 }
