@@ -56,6 +56,32 @@ namespace sem7_SE_project.Services.OrderService
             }
         }
 
+        public void EditOrder(int orderId, int orderStatusId)
+        {
+            Order? order = GetOrder(orderId);
+
+            if (order != null)
+            {
+                try
+                {
+                    order.OrderStatus = _dbContext.OrderStatuses!.FirstOrDefault(s => s.Id.Equals(orderStatusId));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+                finally
+                {
+                    _dbContext.SaveChanges();
+                }
+            }
+        }
+
+        public Order? GetOrder(int orderId)
+        {
+            return _dbContext.Orders!.Where(o => o.Id.Equals(orderId)).Include(o => o.Car).ThenInclude(c => c!.Model).ThenInclude(m => m!.Brand).Include(o => o.Client).Include(o => o.OrderStatus).FirstOrDefault();
+        }
+
         public List<Order> GetOrders()
         {
             return _dbContext.Orders!.Include(o => o.Car).ThenInclude(c => c!.Model).ThenInclude(m => m!.Brand).Include(o => o.Client).Include(o => o.OrderStatus).ToList();

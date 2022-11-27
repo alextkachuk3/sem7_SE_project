@@ -1,0 +1,55 @@
+﻿<link href="~/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+
+@{
+    Order order = Model;
+}
+
+<div class="container">
+    <form method="post">
+        <div class="form-text">
+            <div class="col-sm-8"><h2>Edit order status</h2></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="orderStatusInput" class="form-label">Status</label>
+            <select name="orderStatusId" id="orderStatusInput" class="form-select" aria-label=".form-select-sm example" required>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Edit</button>
+    </form>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/select2.min.js"></script>
+    <script>
+        let oldOrderStatusId = @order.OrderStatus!.Id;
+
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetOrderStatuses", "Order")",
+                dataType: "json",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        if (item.id == oldOrderStatusId) {
+                            $("#orderStatusInput").append($("<option>", {
+                                value: item.id,
+                                text: item.name
+                            }).attr("selected", "selected"));
+                        }
+                        else {
+                            $("#orderStatusInput").append($("<option>", {
+                                value: item.id,
+                                text: item.name
+                            }));
+                        }
+                    });
+                    console.log(result);
+                }
+            });
+        });
+    </script>
+}

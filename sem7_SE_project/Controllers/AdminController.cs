@@ -313,5 +313,27 @@ namespace sem7_SE_project.Controllers
             _orderService.AddOrder(clientId, carId, testDriveNeeded, orderStatusId);
             return Redirect("~/admin/orders/");
         }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult EditOrder(int orderId)
+        {
+            Order? order = _orderService.GetOrder(orderId);
+            if (order != null)
+            {
+                return View(order);
+            }
+            else
+            {
+                return Redirect("~/admin/orders/");
+            }            
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public IActionResult EditOrder(int orderId, int orderStatusId)
+        {
+            _orderService.EditOrder(orderId, orderStatusId);
+            return Redirect("~/admin/orders/");
+        }
     }
 }
